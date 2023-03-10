@@ -7,45 +7,54 @@ typedef vector<int> vi;
 typedef vector<ll> vl;
 typedef pair<int,int> pi;
 
-ll tt, n, m, k, nn, mm, x, sol;
+ll tt, n, m, nn, mm, y;
 char c;
 string s;
 vl a;
 vl b;
+
+int searchTicket(ll x, vl &array){
+    int ai = 0, bf = n-1;
+    while (ai <= bf) {
+        int k = (ai+bf)/2;
+        if (array[k] == x) {
+            return k;
+        }
+        if (array[k] < x) ai = k+1;
+        else bf = k-1;
+    }
+
+    if(array[ai] <= x)
+        return ai;
+    else if(ai - 1 >= 0 && array[ai - 1] <= x)
+        return ai - 1;
+    return -1;
+}
  
 int main(){
     ios::sync_with_stdio(0);
     cin.tie(0);
  
-    cin >> n >> m >> k;
+    cin >> n >> m;
     nn = n;
-    mm = m;
-    sol = 0;
 
     for(;nn--;){
-        cin >> x;
-        a.push_back(x);
-    }
-
-    for(;mm--;){
-        cin >> x;
-        b.push_back(x);
+        cin >> y;
+        a.push_back(y);
     }
 
     sort(a.begin(), a.end());
-    sort(b.begin(), b.end());
 
-    int bi = 0;
-    for(int i = 0; i < n && bi < m; i++){
-        while(b[bi] < a[i] - k && bi < m)
-            bi++;
-        if(bi < m && b[bi] <= a[i] + k){
-            sol++;
-            bi++;
+    for(;m--;){
+        cin >> y;
+        int idx = searchTicket(y, a);
+        ll sol = -1;
+        if(idx != -1){
+            sol = a[idx];
+            a.erase(a.begin() + idx);
         }
-    }
-
-    cout << sol << "\n";
+        cout << sol << "\n";
+    }    
 
     return 0;
 }
